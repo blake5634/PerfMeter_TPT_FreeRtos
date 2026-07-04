@@ -91,47 +91,6 @@ void Clear_Busy(void){
 }
 
 
-
-/*
- *   Set Perf Bit task (priority PRIOR_HIGHEST)
- */
-
-static void PerfBit_SetBusy(void*)
-{   int x = 1;
-    while(1) {
-        x = ~x;
-        gpio_set_level(BUSY_GPIO, 1);
-        vTaskDelay(pdMS_TO_TICKS(7));
-    }
-}
-
-/*
- *   Set Perf Bit task (priority PRIOR_LOWEST)
- */
-
-static void PerfBit_SetFree(void*)
-{
-    while(1) {
-        gpio_set_level(BUSY_GPIO, 0);  // will be pre-empted!
-        vTaskDelay(pdMS_TO_TICKS(4));
-        }
-}
-
-/*
- *   OLD STYLE
-void vApplicationIdleHook( void ){  // same intent as PerfBit_SetFree
-    gpio_set_level(BUSY_GPIO, 0);
-}
-*/
-
-/*
- * New style
- */
-bool my_idle_callback(void) {
-    // gpio_set_level(BUSY_GPIO, 0);  // clear if idle
-    return true; // Call once per tick
-}
-
 /*
  *
  *    Set up three CPU user tasks
